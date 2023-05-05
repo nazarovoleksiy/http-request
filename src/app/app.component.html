@@ -60,7 +60,14 @@
       </ul>
         <app-loader *ngIf="isFetching && !error"></app-loader>
       <div class="alert alert-danger" *ngIf="error">
-        <h1>{{error}}</h1>
+        <h1>An error Occurred !</h1>
+        <p>{{error}}</p>
+        <button
+          class="btn btn-danger"
+          (click)="onHandleError()"
+        >
+          OK
+        </button>
       </div>
     </div>
   </div>
