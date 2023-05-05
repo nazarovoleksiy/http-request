@@ -36,4 +36,8 @@ export class PostsService {
           return postArray;
         }));
     }
+
+    deletePost() {
+      return  this.http.delete('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json')
+    }
 }

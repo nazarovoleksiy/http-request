@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {delay, map} from "rxjs/operators";
 import {Post} from "./post.model";
 import {PostsService} from "./posts.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,12 @@ import {PostsService} from "./posts.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
   loadedPosts: Post[] = [];
   isFetching = false;
+
+
+  @ViewChild('postForm') postForm: NgForm;
 
   constructor(
     private http: HttpClient,
@@ -30,17 +35,32 @@ export class AppComponent implements OnInit {
       );
   }
 
-  onCreatePost(postData: Post) {
-    this.postService.createAndStorePost(postData.title, postData.content);
+  onFetchPosts() {
+    this.isFetching = true;
+    this.postService.fetchPosts()
+      .pipe(delay(1200))
+      .subscribe(
+        (posts => {
+          this.isFetching = false;
+          this.loadedPosts = posts;
+        })
+      );
   }
 
-  onFetchPosts() {
-
-    this.postService.fetchPosts();
+  onCreatePost(postData: Post) {
+    this.postService.createAndStorePost(postData.title, postData.content);
+    setTimeout(() => {
+      this.onFetchPosts();
+    },300)
   }
 
   onClearPosts() {
-    // Send Http request
+    this.postService.deletePost()
+      .subscribe(
+        () => {
+          this.loadedPosts = [];
+        }
+      );
   }
 
   private fetchPosts() {
