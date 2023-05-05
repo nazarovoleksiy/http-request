@@ -24,7 +24,7 @@ export class PostsService {
     }
 
     fetchPosts() {
-      return  this.http
+      return this.http
         .get<{ [key: string]: Post }>('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json')
         .pipe(map(responseData => {
           const postArray: Post[] = [];

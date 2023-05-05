@@ -21,11 +21,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.isFetching = true;
     this.postService.fetchPosts()
-      .pipe(delay(2000))
+      .pipe(delay(1200))
       .subscribe(
         (posts => {
-          this.loadedPosts = posts;
           this.isFetching = false;
+          this.loadedPosts = posts;
         })
       );
   }

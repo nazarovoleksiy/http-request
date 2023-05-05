@@ -58,9 +58,7 @@
           <p>{{ post.content }}</p>
         </li>
       </ul>
-      <div *ngIf="isFetching">
-        <app-loader></app-loader>
-      </div>
+        <app-loader *ngIf="isFetching"></app-loader>
     </div>
   </div>
 </div>
