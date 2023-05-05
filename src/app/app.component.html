@@ -58,7 +58,10 @@
           <p>{{ post.content }}</p>
         </li>
       </ul>
-        <app-loader *ngIf="isFetching"></app-loader>
+        <app-loader *ngIf="isFetching && !error"></app-loader>
+      <div class="alert alert-danger" *ngIf="error">
+        <h1>{{error}}</h1>
+      </div>
     </div>
   </div>
 </div>
