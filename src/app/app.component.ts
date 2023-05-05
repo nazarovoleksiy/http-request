@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from "rxjs/operators";
 import {Post} from "./post.model";
+import {PostsService} from "./posts.service";
 
 @Component({
   selector: 'app-root',
@@ -14,26 +15,20 @@ export class AppComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private postService: PostsService,
   ) {}
 
   ngOnInit() {
-    this.fetchPosts();
+    this.postService.fetchPosts();
   }
 
   onCreatePost(postData: Post) {
-    // Send Http request
-    this.http
-      .post<{ name: string }>(
-      'https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json',
-      postData
-    ).subscribe(responseData => {
-      console.log(responseData);
-    })
+    this.postService.createAndStorePost(postData.title, postData.content);
   }
 
   onFetchPosts() {
 
-    this.fetchPosts();
+    this.postService.fetchPosts();
   }
 
   onClearPosts() {
@@ -42,20 +37,6 @@ export class AppComponent implements OnInit {
 
   private fetchPosts() {
     this.isFetching = true;
-    this.http
-      .get<{ [key: string]: Post }>('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json')
-      .pipe(map(responseData => {
-        const postArray: Post[] = [];
-        for (const key in responseData) {
-          if (responseData.hasOwnProperty(key)) {
-            postArray.push({...responseData[key], id: key });
-          }
-        }
-        return postArray;
-      }))
-      .subscribe(posts => {
-        this.isFetching = false;
-        this.loadedPosts = posts;
-      });
+
   }
 }
