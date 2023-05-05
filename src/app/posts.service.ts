@@ -24,7 +24,7 @@ export class PostsService {
     }
 
     fetchPosts() {
-      this.http
+      return  this.http
         .get<{ [key: string]: Post }>('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json')
         .pipe(map(responseData => {
           const postArray: Post[] = [];
@@ -34,8 +34,6 @@ export class PostsService {
             }
           }
           return postArray;
-        }))
-        .subscribe(posts => {
-        });
+        }));
     }
 }

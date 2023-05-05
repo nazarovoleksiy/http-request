@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from "rxjs/operators";
+import {delay, map} from "rxjs/operators";
 import {Post} from "./post.model";
 import {PostsService} from "./posts.service";
 
@@ -19,7 +19,15 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.postService.fetchPosts();
+    this.isFetching = true;
+    this.postService.fetchPosts()
+      .pipe(delay(2000))
+      .subscribe(
+        (posts => {
+          this.loadedPosts = posts;
+          this.isFetching = false;
+        })
+      );
   }
 
   onCreatePost(postData: Post) {
@@ -37,6 +45,5 @@ export class AppComponent implements OnInit {
 
   private fetchPosts() {
     this.isFetching = true;
-
   }
 }
