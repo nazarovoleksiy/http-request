@@ -5,7 +5,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LoaderComponent } from './loader/loader.component';
-import {AuthInterceptorSevice} from "./auth-interceptor.sevice";
+import {AuthInterceptorService} from "./auth-interceptor.service";
 
 @NgModule({
   declarations: [AppComponent, LoaderComponent],
@@ -13,7 +13,7 @@ import {AuthInterceptorSevice} from "./auth-interceptor.sevice";
   providers: [
     {
     provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptorSevice,
+    useClass: AuthInterceptorService,
     multi: true }
   ],
   bootstrap: [AppComponent]
