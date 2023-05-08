@@ -3,7 +3,7 @@ import {tap} from "rxjs/operators";
 
 
 export class LoggingInterceptorService implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(req: HttpRequest<any>,  next: HttpHandler) {
     console.log('Outgoing request');
     console.log(req.url);
     console.log(req.headers);
