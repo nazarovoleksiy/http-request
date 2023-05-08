@@ -43,7 +43,7 @@ export class PostsService {
               'Custom-header': 'Hello',
               'Another-custom-header': 'Bye'
             }),
-            params: searchParams
+            params: searchParams,
           }
         )
         .pipe(
@@ -64,7 +64,8 @@ export class PostsService {
     deletePost() {
       return  this.http.delete('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json',
         {
-         observe: 'events'
+          observe: 'events',
+          responseType: 'text'
         }
       ).pipe(tap(event => {
         console.log(event);
