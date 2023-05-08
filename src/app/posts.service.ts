@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {HttpClient, HttpEventType, HttpHeaders, HttpParams } from "@angular/common/http";
 
-import { Post } from "./post.model";
-import {catchError, map} from "rxjs/operators";
-import { Subject, throwError } from "rxjs";
+import {Post} from "./post.model";
+import {catchError, map, tap} from "rxjs/operators";
+import {Subject, throwError} from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
@@ -16,11 +16,14 @@ export class PostsService {
   ) {}
 
     createAndStorePost(title: string, content: string){
-    const postData: Post = {title: title, content: content}
+    const postData: Post = {title: title, content: content};
       this.http
         .post<{ name: string }>(
           'https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json',
-          postData
+          postData,
+          {
+            observe: 'response'
+          }
         ).subscribe(responseData => {
         console.log(responseData);
       }, error => {
@@ -43,7 +46,8 @@ export class PostsService {
             params: searchParams
           }
         )
-        .pipe(map(responseData => {
+        .pipe(
+          map(responseData => {
           const postArray: Post[] = [];
           for (const key in responseData) {
             if (responseData.hasOwnProperty(key)) {
@@ -58,6 +62,18 @@ export class PostsService {
     }
 
     deletePost() {
-      return  this.http.delete('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json')
+      return  this.http.delete('https://angular-http-nazarov-default-rtdb.firebaseio.com/posts.json',
+        {
+         observe: 'events'
+        }
+      ).pipe(tap(event => {
+        console.log(event);
+        if (event.type === HttpEventType.Sent) {
+          ///...
+        }
+        if (event.type === HttpEventType.Response) {
+          console.log(event.body)
+        }
+      }))
     }
 }
